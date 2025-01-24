@@ -3566,8 +3566,10 @@ dependencies = [
 name = "shiro"
 version = "0.1.0"
 dependencies = [
+ "cocoa",
  "homedir",
  "macros",
+ "objc",
  "serde",
  "serde_json",
  "sqlx",

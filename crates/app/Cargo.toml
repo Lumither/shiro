@@ -12,6 +12,7 @@ tauri-build = { version = "2", features = [] }
 # ui
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
+#window-vibrancy = "0.5.0"
 
 # crates
 serde = { version = "1", features = ["derive"] }
@@ -24,3 +25,7 @@ whoami = "1.5.2"
 tracing = "0.1.41"
 
 macros = { path = "../macros" }
+
+[target."cfg(target_os = \"macos\")".dependencies]
+cocoa = "0.26.0"
+objc = "0.2"

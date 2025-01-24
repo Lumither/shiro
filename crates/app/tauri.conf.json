@@ -10,16 +10,7 @@
     "frontendDist": "../../ui/out"
   },
   "app": {
-    "windows": [
-      {
-
-        "hiddenTitle": true,
-        "titleBarStyle": "Overlay",
-        "title": "Shiro",
-        "width": 800,
-        "height": 600
-      }
-    ],
+    "windows": [],
     "security": {
       "csp": null
     }
