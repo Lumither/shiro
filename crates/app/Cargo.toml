@@ -25,6 +25,7 @@ whoami = "1.5.2"
 tracing = "0.1.41"
 
 macros = { path = "../macros" }
+libshiro = { path = "../libshiro" }
 
 [target."cfg(target_os = \"macos\")".dependencies]
 cocoa = "0.26.0"

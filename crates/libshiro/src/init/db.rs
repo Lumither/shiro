@@ -1,13 +1,14 @@
 use std::path::PathBuf;
 
-use crate::init::error::{Error, Error::Database};
+use crate::{
+    init::error::{Error, Error::Database},
+    query::MIGRATION_QUERY,
+};
 
-use macros::include_str_from_crate_root;
-
-use sqlx::{query, SqlitePool};
+use sqlx::{query, sqlite::SqliteConnectOptions, SqlitePool};
 
 pub async fn init(db_path: PathBuf) -> Result<SqlitePool, Error> {
-    let option = sqlx::sqlite::SqliteConnectOptions::new()
+    let option = SqliteConnectOptions::new()
         .filename(db_path)
         .create_if_missing(true);
     match SqlitePool::connect_with(option).await {
@@ -17,8 +18,6 @@ pub async fn init(db_path: PathBuf) -> Result<SqlitePool, Error> {
 }
 
 pub async fn migrate(database: &SqlitePool) -> Result<(), Error> {
-    query(include_str_from_crate_root!("/query/scheme.sql"))
-        .execute(database)
-        .await?;
+    query(MIGRATION_QUERY).execute(database).await?;
     Ok(())
 }

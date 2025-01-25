@@ -8,3 +8,7 @@ body {
     width: 100%;
     overflow: hidden;
 }
+
+.searchBox {
+    width: clamp(200px, 40vw, 700px);
+}

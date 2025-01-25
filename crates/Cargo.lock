@@ -2118,7 +2118,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "libsmgr"
+name = "libshiro"
 version = "0.1.0"
 dependencies = [
  "homedir",
@@ -3568,6 +3568,7 @@ version = "0.1.0"
 dependencies = [
  "cocoa",
  "homedir",
+ "libshiro",
  "macros",
  "objc",
  "serde",

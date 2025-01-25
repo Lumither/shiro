@@ -1,8 +1,7 @@
-
 export default function Home() {
     return (
-        <div>
-            ui
+        <div className={ 'h-full w-full bg-amber-200' }>
+
         </div>
     );
 }
