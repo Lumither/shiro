@@ -5,7 +5,10 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 pub enum Error {
     #[error(transparent)]
-    Database(#[from] sqlx::Error),
+    DbInit(#[from] sqlx::Error),
+    
+    #[error("database query error: {0}")]
+    DbQuery(String),
 
     #[error(transparent)]
     HomeDirUnknown(#[from] GetHomeError),

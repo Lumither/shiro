@@ -24,6 +24,18 @@ impl InitArgs for InitWithWorkDIr {
     }
 }
 
+pub struct InitWithPaths {
+    pub db_path: PathBuf,
+}
+
+impl InitArgs for InitWithPaths {
+    fn to_args(&self) -> Args {
+        Args {
+            db_path: self.db_path.join("data.sqlite"),
+        }
+    }
+}
+
 pub struct Args {
     pub db_path: PathBuf,
 }

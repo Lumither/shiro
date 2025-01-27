@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use crate::{
-    init::error::{Error, Error::Database},
+    init::error::{Error, Error::DbInit},
     query::MIGRATION_QUERY,
 };
 
@@ -13,7 +13,7 @@ pub async fn init(db_path: PathBuf) -> Result<SqlitePool, Error> {
         .create_if_missing(true);
     match SqlitePool::connect_with(option).await {
         Ok(pool) => Ok(pool),
-        Err(e) => Err(Database(e)),
+        Err(e) => Err(DbInit(e)),
     }
 }
 

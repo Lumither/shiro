@@ -1,9 +1,6 @@
-use tauri::{AppHandle, LogicalSize, WebviewWindow};
+pub mod handlers;
 
-#[tauri::command]
-pub fn hello_world(name: &str) -> String {
-    format!("Hello, {}!", name)
-}
+use tauri::{AppHandle, LogicalSize, WebviewWindow};
 
 pub fn build_main_window(app: &AppHandle) -> WebviewWindow {
     #[cfg(target_os = "macos")]
