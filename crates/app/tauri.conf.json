@@ -20,7 +20,9 @@
     "targets": "all",
     "icon": [
       "icons/Shiro.svg",
-      "icons/Shiro_512x512.png"
+      "icons/Shiro_512x512.png",
+      "icons/Shiro.icns",
+      "icons/Shiro.ico"
     ]
   }
 }
