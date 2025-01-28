@@ -1,7 +1,8 @@
 use std::path::PathBuf;
 
+use crate::{error::Error, init::db::migrate, ShiroBackend};
+
 pub mod db;
-pub mod error;
 
 pub trait InitArgs {
     fn to_args(&self) -> Args
@@ -40,12 +41,20 @@ pub struct Args {
     pub db_path: PathBuf,
 }
 
+impl ShiroBackend {
+    pub async fn init(prop: impl InitArgs) -> Result<Self, Error> {
+        let args: Args = prop.to_args();
+
+        let db_handler = db::init(args.db_path).await?;
+        migrate(&db_handler).await?;
+
+        Ok(Self { db_handler })
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::{
-        init::{error::Error, InitWithWorkDIr},
-        ShiroBackend,
-    };
+    use crate::{error::Error, init::InitWithWorkDIr, ShiroBackend};
 
     use homedir::my_home;
 

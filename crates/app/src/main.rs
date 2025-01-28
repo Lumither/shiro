@@ -1,29 +1,30 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+#[cfg(target_os = "macos")]
+#[macro_use]
+extern crate objc;
+
+use std::fs::create_dir_all;
+
 use crate::gui::build_main_window;
 use libshiro::{
     init::{InitWithPaths, InitWithWorkDIr},
     ShiroBackend,
 };
 use macros::panic_with_log;
-use std::fs::create_dir_all;
 
 use homedir::my_home;
 use tauri::Manager;
 use tauri_api::path;
 use tracing::Level;
 
-#[cfg(target_os = "macos")]
-#[macro_use]
-extern crate objc;
-
 mod gui;
+
+const PATH_PREFIX: &str = "shiro";
 
 struct AppData {
     pub backend: ShiroBackend,
 }
-
-const PATH_PREFIX: &str = "shiro";
 
 #[tokio::main]
 async fn main() {

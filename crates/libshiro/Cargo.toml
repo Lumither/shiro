@@ -13,6 +13,7 @@ homedir = "0.3.4"
 tracing = "0.1.41"
 
 macros = { path = "../macros" }
+serde = { version = "1.0.217", features = ["derive"] }
 
 [dev-dependencies]
 tokio = { version = "1.43.0", features = ["macros", 'rt-multi-thread'] }

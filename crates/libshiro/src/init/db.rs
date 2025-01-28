@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use crate::{
-    init::error::{Error, Error::DbInit},
+    error::{Error, Error::DbInit},
     query::MIGRATION_QUERY,
 };
 
