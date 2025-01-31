@@ -8,8 +8,9 @@ CREATE TABLE IF NOT EXISTS servers
 (
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
     group_id INTEGER,
-    name     TEXT NOT NULL,
-    ip       TEXT NOT NULL,
+    name     TEXT    NOT NULL,
+    ip       TEXT    NOT NULL,
+    port     INTEGER NOT NULL,
     desc     TEXT,
 
     FOREIGN KEY (group_id) REFERENCES groups (id)

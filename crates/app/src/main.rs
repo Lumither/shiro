@@ -6,7 +6,10 @@ extern crate objc;
 
 use std::fs::create_dir_all;
 
-use crate::gui::build_main_window;
+use crate::gui::{
+    build_main_window,
+    handlers::{get_server_groups, get_server_tags, get_servers, get_server_tags_with_sid},
+};
 use libshiro::{
     init::{InitWithPaths, InitWithWorkDIr},
     ShiroBackend,
@@ -14,7 +17,7 @@ use libshiro::{
 use macros::panic_with_log;
 
 use homedir::my_home;
-use tauri::Manager;
+use tauri::{generate_context, generate_handler, Manager};
 use tauri_api::path;
 use tracing::Level;
 
@@ -48,11 +51,15 @@ async fn main() {
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             app.manage(AppData { backend });
-
             build_main_window(app.handle());
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![])
-        .run(tauri::generate_context!())
+        .invoke_handler(generate_handler![
+            get_server_groups,
+            get_servers,
+            get_server_tags,
+            get_server_tags_with_sid
+        ])
+        .run(generate_context!())
         .expect("error while running tauri application");
 }

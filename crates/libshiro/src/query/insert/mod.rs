@@ -24,12 +24,14 @@ impl ShiroBackend {
         group_id: Option<i64>,
         host_name: &str,
         ip: &IpAddr,
+        port: Option<u16>,
         desc: Option<&str>,
     ) -> Result<(), Error> {
         match query(NEW_SERVER)
             .bind(group_id)
             .bind(host_name)
             .bind(ip.to_string())
+            .bind(port.unwrap_or(22))
             .bind(desc)
             .execute(&self.db_handler)
             .await
