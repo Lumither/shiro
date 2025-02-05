@@ -11,10 +11,10 @@ pub struct ShiroBackend {
     db_handler: SqlitePool,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ServerGroup {
-    id: i64,
-    name: String,
+    pub id: i64,
+    pub name: String,
 }
 
 impl TryFrom<SqliteRow> for ServerGroup {
@@ -28,8 +28,7 @@ impl TryFrom<SqliteRow> for ServerGroup {
     }
 }
 
-
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Server {
     pub id: i64,
     pub group_id: i64,
@@ -54,7 +53,7 @@ impl TryFrom<SqliteRow> for Server {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ServerTag {
     pub id: i64,
     pub name: String,

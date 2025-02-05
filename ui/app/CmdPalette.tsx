@@ -2,19 +2,19 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Input, Kbd } from '@heroui/react';
-import { IoSearch } from 'react-icons/io5';
+import { FaTerminal } from 'react-icons/fa6';
 
 type Props = {
     className?: string;
 }
 
-const GlobSearch = (prop: Props) => {
+const CmdPalette = (prop: Props) => {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.metaKey && e.key === 'k') {
+            if (e.metaKey && e.key === 'p') {
                 if (inputRef.current) {
                     inputRef.current.focus();
                 }
@@ -31,13 +31,13 @@ const GlobSearch = (prop: Props) => {
         <div className={ `${ prop.className } flex justify-center` }>
             <Input
                 className={ 'searchBox z-10' }
-                placeholder="Search"
-                startContent={ <IoSearch /> }
+                placeholder="Command"
+                startContent={ <FaTerminal /> }
                 ref={ inputRef }
-                endContent={ <Kbd keys={ [ 'command' ] }>K</Kbd> }
+                endContent={ <Kbd keys={ [ 'command' ] }>P</Kbd> }
             />
         </div>
     );
 };
 
-export default GlobSearch;
+export default CmdPalette;

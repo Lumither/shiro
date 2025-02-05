@@ -12,3 +12,12 @@ body {
 .searchBox {
     width: clamp(200px, 40vw, 700px);
 }
+
+.homePageWrapper {
+    width: clamp(150px, 60vw, 900px);
+}
+
+.settingsWrapper {
+    width: clamp(150px, 60vw, 900px);
+}
+

@@ -1,18 +1,18 @@
 import React from 'react';
-import {
-    IoHome,
-    IoInformationCircle
-} from 'react-icons/io5';
+import { FaServer } from 'react-icons/fa';
+import { IoIosRocket } from 'react-icons/io';
+
+const ICON_SIZE = '20px';
 
 export const entries: { display_name: string; href: string; icon: React.ReactNode }[] = [
     {
-        icon: <IoHome size={ `20px` }></IoHome>,
-        display_name: 'Home',
-        href: '/'
+        icon: <FaServer size={ ICON_SIZE }></FaServer>,
+        display_name: 'Servers',
+        href: '/servers'
     },
     {
-        icon: <IoInformationCircle size={ `20px` }></IoInformationCircle>,
-        display_name: 'About',
-        href: '/about'
+        icon: <IoIosRocket size={ ICON_SIZE }></IoIosRocket>,
+        display_name: 'Deploy',
+        href: '/deploy'
     }
 ];

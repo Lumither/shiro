@@ -1,4 +1,5 @@
 pub mod handlers;
+mod types;
 
 use tauri::{AppHandle, LogicalSize, WebviewWindow};
 
@@ -9,15 +10,19 @@ pub fn build_main_window(app: &AppHandle) -> WebviewWindow {
     #[cfg(target_os = "windows")]
     let style = tauri::TitleBarStyle::Visible;
 
-    let win = tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::default())
-        .decorations(true)
-        .resizable(true)
-        .visible(true)
-        .title("Shiro")
-        .hidden_title(true)
-        .title_bar_style(style)
-        .build()
-        .expect("failed to build window");
+    let win = tauri::WebviewWindowBuilder::new(
+        app,
+        "main",
+        tauri::WebviewUrl::App("/servers".parse().unwrap()),
+    )
+    .decorations(true)
+    .resizable(true)
+    .visible(true)
+    .title("Shiro")
+    .hidden_title(true)
+    .title_bar_style(style)
+    .build()
+    .expect("failed to build window");
 
     win.set_size(LogicalSize::new(800, 600))
         .expect("failed to set size");

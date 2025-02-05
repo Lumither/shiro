@@ -8,7 +8,10 @@ use std::fs::create_dir_all;
 
 use crate::gui::{
     build_main_window,
-    handlers::{get_server_groups, get_server_tags, get_servers, get_server_tags_with_sid},
+    handlers::{
+        add_tag_to_server, get_server_groups, get_server_tags, get_server_tags_with_sid,
+        get_server_with_sid, get_servers, new_group, new_server,
+    },
 };
 use libshiro::{
     init::{InitWithPaths, InitWithWorkDIr},
@@ -21,6 +24,7 @@ use tauri::{generate_context, generate_handler, Manager};
 use tauri_api::path;
 use tracing::Level;
 
+mod error;
 mod gui;
 
 const PATH_PREFIX: &str = "shiro";
@@ -57,8 +61,12 @@ async fn main() {
         .invoke_handler(generate_handler![
             get_server_groups,
             get_servers,
+            get_server_with_sid,
             get_server_tags,
-            get_server_tags_with_sid
+            get_server_tags_with_sid,
+            new_group,
+            new_server,
+            add_tag_to_server
         ])
         .run(generate_context!())
         .expect("error while running tauri application");

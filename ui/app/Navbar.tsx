@@ -2,6 +2,7 @@ import React from 'react';
 import { entries } from '@/app/entries';
 import { Button } from '@heroui/react';
 import Link from 'next/link';
+import { IoMdSettings } from 'react-icons/io';
 
 type Props = {
     className?: string;
@@ -10,8 +11,10 @@ type Props = {
 const Navbar = (prop: Props) => {
     return (
         <div className={ `${ prop.className } grid` }>
+            <div className={ 'content-start' }></div>
+
             <div className={ 'content-center' }>
-                <ul className={ `flex flex-col space-y-2 w-full justify-center px-4` }>
+                <ul className={ `flex flex-col space-y-2 w-full justify-center px-2` }>
                     {
                         entries.map((meta, key) => (
                             <li key={ key }>
@@ -31,6 +34,22 @@ const Navbar = (prop: Props) => {
                         ))
                     }
                 </ul>
+            </div>
+            <div className={ 'content-end' }>
+                <div className={ 'p-2' }>
+                    <Button
+                        as={ Link }
+                        variant={ `light` }
+                        color={ `default` }
+                        fullWidth
+                        className={ 'w-full' }
+                        aria-label={ `navbar: Settings` }
+                        href={ '/settings' }
+                        startContent={ <IoMdSettings size={'20px'} /> }
+                    >
+                        Settings
+                    </Button>
+                </div>
             </div>
         </div>
     );

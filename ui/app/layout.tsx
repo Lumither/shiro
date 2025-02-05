@@ -3,7 +3,7 @@ import './globals.css';
 import React from 'react';
 import { Providers } from '@/app/providers';
 import Navbar from '@/app/Navbar';
-import GlobSearch from '@/app/GlobSearch';
+import CmdPalette from '@/app/CmdPalette';
 
 export const metadata: Metadata = {
     title: 'Shiro',
@@ -20,13 +20,13 @@ export default function RootLayout({
         <body
             className={ `antialiased` }
         >
-        <div className={ 'absolute w-full h-12 z-10' } data-tauri-drag-region={ true } />
+        <div className={ 'absolute w-full h-12 z-10 blur-lg' } data-tauri-drag-region={ true } />
         <Providers>
             <div className={ 'flex flex-row w-full h-dvh' }>
-                <Navbar className={ 'w-[200px] h-full' } />
+                <Navbar className={ 'w-[150px] h-full flex-none' } />
                 { children }
             </div>
-            <GlobSearch className={ 'absolute top-2 inset-x-0' } />
+            <CmdPalette className={ 'absolute top-2 inset-x-0' } />
         </Providers>
         </body>
         </html>
