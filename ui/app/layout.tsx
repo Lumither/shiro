@@ -22,8 +22,8 @@ export default function RootLayout({
         >
         <div className={ 'absolute w-full h-12 z-10 blur-lg' } data-tauri-drag-region={ true } />
         <Providers>
-            <div className={ 'flex flex-row w-full h-dvh' }>
-                <Navbar className={ 'w-[150px] h-full flex-none' } />
+            <div className={ 'flex flex-row w-full h-dvh bg-neutral-800' }>
+                <Navbar className={ 'w-[150px] h-full flex-none bg-neutral-700' } />
                 { children }
             </div>
             <CmdPalette className={ 'absolute top-2 inset-x-0' } />

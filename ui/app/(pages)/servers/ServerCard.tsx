@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { GServer, Tag } from '@/types/shiro';
-import { Card, CardBody, Chip } from '@heroui/react';
+import { Button, Card, CardBody, Chip } from '@heroui/react';
 import { CardHeader } from '@heroui/card';
 import { IoCopy } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 type Props = {
     className?: string;
@@ -49,8 +50,18 @@ const ServerCard = ({ className, gServer }: Props) => {
         <div className={ className }>
             <Card
                 isHoverable={ true }
+                as={ Link }
+                href={ `/servers/editor/?sid=${ server.id }` }
+                classNames={ {
+                    base: [
+                        'bg-neutral-700',
+                        'hover:bg-neutral-800'
+                    ]
+                } }
             >
-                <CardHeader className={ 'pb-0' }>
+                <CardHeader
+                    className={ 'pb-0' }
+                >
                     <p className={ 'text-xl' }>
                         { server.name }
                     </p>

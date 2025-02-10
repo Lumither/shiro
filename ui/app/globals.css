@@ -13,7 +13,7 @@ body {
     width: clamp(200px, 40vw, 700px);
 }
 
-.homePageWrapper {
+.contentWrapper {
     width: clamp(150px, 60vw, 900px);
 }
 

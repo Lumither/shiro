@@ -30,6 +30,12 @@ const CmdPalette = (prop: Props) => {
     return (
         <div className={ `${ prop.className } flex justify-center` }>
             <Input
+                classNames={ {
+                    inputWrapper: [
+                        'bg-neutral-700',
+                        'group-data-[focus=true]:bg-neutral-700',
+                    ]
+                } }
                 className={ 'searchBox z-10' }
                 placeholder="Command"
                 startContent={ <FaTerminal /> }

@@ -15,12 +15,12 @@ const Page = () => {
                 .then((res) => setServerList(res as GServer[]))
                 .catch((e) => console.error(e));
         };
-        fetchServers();
+        fetchServers().then();
     }, []);
 
     return (
         <div className={ 'p-8 pt-0 overflow-y-auto w-full flex justify-center' }>
-            <div className={ 'homePageWrapper' }>
+            <div className={ 'contentWrapper' }>
                 <ToolBar />
                 <ul className={ 'grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4' }>
                     {
