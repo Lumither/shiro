@@ -1,8 +1,10 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Chip, Input, Select, SelectItem, Textarea } from '@heroui/react';
 import { Group, Tag } from '@/types/shiro';
 import ipaddr from 'ipaddr.js';
 import { invoke } from '@tauri-apps/api/core';
+import { GeneralEditorContext } from '@/app/(pages)/servers/editor/ServerEditor';
+import { toast } from 'react-toastify';
 
 // todo: use backend to check ip validity (remove ipaddr.js dependency)
 const isValidIP = (ip: string): boolean => {
@@ -16,18 +18,42 @@ const isValidIP = (ip: string): boolean => {
 
 type Props = {
     className?: string;
-    setName: React.Dispatch<React.SetStateAction<string>>;
-    ip: string;
-    setIp: React.Dispatch<React.SetStateAction<string>>;
-    setGroup: React.Dispatch<React.SetStateAction<Set<string>>>;
-    tags: Set<string>;
-    setTags: React.Dispatch<React.SetStateAction<Set<string>>>;
-    setDescription: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Generals = (props: Props) => {
-    const { className, setName, ip, setIp, setGroup, tags, setTags, setDescription } = props;
+    const { className } = props;
 
+    const [ groupSet, setGroupSet ] = useState<Set<string>>(new Set([]));
+    const [ tagsSet, setTagsSet ] = useState<Set<string>>(new Set([]));
+
+    const ctx = useContext(GeneralEditorContext);
+    if (ctx === undefined) {
+        toast.error('Unexpected ctx');
+        return <></>;
+    }
+    const { setName, ip, setIp, setDescription, setGroup, setTags } = ctx;
+
+    useEffect(() => {
+        if (groupSet.size > 0) {
+            const gid = parseInt(
+                [ ...groupSet ]
+                    .filter((v) => v !== '')
+                    [0]
+            );
+            setGroup(isNaN(gid) ? null : gid);
+        } else (
+            setGroup(null)
+        );
+    }, [ groupSet ]);
+    useEffect(() => {
+        setTags(
+            [ ...tagsSet ]
+                .filter((v) => v !== '')
+                .map((val) => parseInt(val))
+        );
+    }, [ tagsSet ]);
+
+    // local
     const [ groupList, setGroupList ] = useState<Group[] | null>(null);
     const [ tagList, setTagList ] = useState<Tag[] | null>(null);
 
@@ -75,7 +101,7 @@ const Generals = (props: Props) => {
                         variant={ 'underlined' }
                         label={ 'Group' }
                         onChange={ (e) => {
-                            handleInputChange(e, setGroup);
+                            handleInputChange(e, setGroupSet);
                         } }
                         classNames={ {
                             popoverContent: [ 'bg-neutral-800' ]
@@ -96,9 +122,9 @@ const Generals = (props: Props) => {
                         variant={ 'underlined' }
                         label={ 'Tag(s)' }
                         selectionMode={ 'multiple' }
-                        selectedKeys={ tags }
+                        selectedKeys={ tagsSet }
                         onChange={ (e) => {
-                            handleInputChange(e, setTags);
+                            handleInputChange(e, setTagsSet);
                         } }
                         classNames={ {
                             popoverContent: [ 'bg-neutral-800' ]
@@ -113,9 +139,12 @@ const Generals = (props: Props) => {
                                                 key={ tag.id }
                                                 size={ 'sm' }
                                                 onClose={ () => {
-                                                    const tagsClone = new Set(tags);
-                                                    tagsClone.delete(tag.id.toString());
-                                                    setTags(tagsClone);
+                                                    setTagsSet(
+                                                        new Set(
+                                                            [ ...tagsSet ]
+                                                                .filter((v) => v !== tag.id.toString())
+                                                        )
+                                                    );
                                                 } }
                                             >{ tag.name }
                                             </Chip>

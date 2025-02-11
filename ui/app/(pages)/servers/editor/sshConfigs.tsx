@@ -11,7 +11,7 @@ import {
 import { FaFilter } from 'react-icons/fa';
 import { FaXmark } from 'react-icons/fa6';
 import { NewConfigRecordButton } from '@/app/(pages)/servers/editor/sshConfigRecord';
-import { ConfigListContext } from '@/app/(pages)/servers/editor/ServerEditor';
+import { ConfigListEditorContext } from '@/app/(pages)/servers/editor/ServerEditor';
 
 type Props = {
     className?: string;
@@ -22,7 +22,7 @@ const SshConfigs = (props: Props) => {
 
     const [ filter, setFilter ] = useState('');
 
-    const ctx = useContext(ConfigListContext);
+    const ctx = useContext(ConfigListEditorContext);
     const configList = ctx?.configList;
 
 
@@ -57,7 +57,7 @@ const SshConfigs = (props: Props) => {
                         <TableColumn className={ 'bg-neutral-700' }>KEY</TableColumn>
                         <TableColumn className={ 'bg-neutral-700' }>VALUE</TableColumn>
                     </TableHeader>
-                    <TableBody emptyContent={ filter === '' ? 'No SSH Config' : 'No matching pattern' }>
+                    <TableBody emptyContent={ filter === '' ? 'No SSH Config' : 'No Matching Pattern' }>
                         {
                             configList ?
                                 configList

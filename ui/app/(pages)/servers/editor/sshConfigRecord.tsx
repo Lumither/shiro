@@ -16,7 +16,7 @@ import {
 import { getIterableObjectSshConfigList, sshConfigList } from '@/app/(pages)/servers/editor/sshConfigList';
 import { SshConfigRecord as configRecord } from '@/types/shiro';
 import { toast } from 'react-toastify';
-import { ConfigListContext } from '@/app/(pages)/servers/editor/ServerEditor';
+import { ConfigListEditorContext } from '@/app/(pages)/servers/editor/ServerEditor';
 
 type Props = {
     className?: string;
@@ -31,7 +31,7 @@ const SshConfigRecord = (props: Props) => {
     const [ key, setKey ] = useState('');
     const [ value, setValue ] = useState('');
 
-    const ctx = useContext(ConfigListContext);
+    const ctx = useContext(ConfigListEditorContext);
     if (ctx == undefined) {
         toast.error('Unexpected ctx');
         return <></>;
@@ -104,7 +104,7 @@ const SshConfigRecord = (props: Props) => {
                                     { key !== '' &&
                                         <div className={ 'flex flex-col gap-2 mb-3' }>
                                             <p className={ 'mt-2' }>Preview</p>
-                                            <Code className={ 'w-full' }>
+                                            <Code className={ 'w-full overflow-x-scroll' }>
                                                 { key + ' ' + value }
                                             </Code>
                                         </div>
