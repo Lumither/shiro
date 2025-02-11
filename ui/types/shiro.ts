@@ -22,3 +22,8 @@ export interface Tag {
     name: string;
     id: number;
 }
+
+export interface SshConfigRecord {
+    key: string;
+    value: any;
+}
