@@ -52,19 +52,26 @@ const SshConfigs = (props: Props) => {
                     </div>
                 </div>
                 <Table aria-label={ 'ssh config' } removeWrapper>
+                    {/* todo: fix layout shifting with filter*/ }
                     <TableHeader>
                         <TableColumn className={ 'bg-neutral-700' }>KEY</TableColumn>
                         <TableColumn className={ 'bg-neutral-700' }>VALUE</TableColumn>
                     </TableHeader>
-                    <TableBody emptyContent={ 'No SSH Config' }>
+                    <TableBody emptyContent={ filter === '' ? 'No SSH Config' : 'No matching pattern' }>
                         {
                             configList ?
-                                configList.map(({ key, value }, index) => (
-                                    <TableRow key={ index }>
-                                        <TableCell>{ key }</TableCell>
-                                        <TableCell>{ value }</TableCell>
-                                    </TableRow>
-                                ))
+                                configList
+                                    .filter((v) => (
+                                        filter === ''
+                                        || v.value.toLowerCase().includes(filter.toLowerCase())
+                                        || v.key.toLowerCase().includes(filter.toLowerCase())
+                                    ))
+                                    .map(({ key, value }, index) => (
+                                        <TableRow key={ index }>
+                                            <TableCell>{ key }</TableCell>
+                                            <TableCell>{ value }</TableCell>
+                                        </TableRow>
+                                    ))
                                 : []
                         }
                     </TableBody>
