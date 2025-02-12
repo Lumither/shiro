@@ -49,8 +49,11 @@ const SshConfigs = (props: Props) => {
                         <NewConfigRecordButton />
                     </div>
                 </div>
-                <Table aria-label={ 'ssh config' } removeWrapper>
-                    {/* todo: fix layout shifting with filter*/ }
+                <Table
+                    aria-label={ 'ssh config' }
+                    removeWrapper
+                    className={ 'overflow-x-scroll' }
+                >
                     <TableHeader>
                         <TableColumn className={ 'bg-neutral-700' }>KEY</TableColumn>
                         <TableColumn className={ 'bg-neutral-700' }>VALUE</TableColumn>
@@ -69,7 +72,7 @@ const SshConfigs = (props: Props) => {
                                         <TableRow key={ index }>
                                             <TableCell>{ key }</TableCell>
                                             <TableCell>{ value }</TableCell>
-                                            <TableCell className={ 'w-min' }>
+                                            <TableCell>
                                                 <div className={ 'flex flex-row gap-2' }>
                                                     <EditConfigRecordButton updateRec={ { key, value } } />
                                                     <DeleteConfigRecordButton deleteKey={ key } />

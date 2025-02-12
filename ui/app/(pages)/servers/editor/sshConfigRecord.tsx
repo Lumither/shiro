@@ -86,6 +86,8 @@ const SshConfigRecord = memo((props: Props) => {
                 classNames={ {
                     base: [ 'bg-neutral-800' ]
                 } }
+                placement={ 'center' }
+                size={ '2xl' }
                 onClose={ () => {
                     if (!updateRec) {
                         setKey('');
@@ -104,7 +106,7 @@ const SshConfigRecord = memo((props: Props) => {
                                         <Input
                                             variant={ 'underlined' }
                                             isDisabled={ true }
-                                            label={'Key'}
+                                            label={ 'Key' }
                                             value={ updateRec.key }
                                         >
                                         </Input>
