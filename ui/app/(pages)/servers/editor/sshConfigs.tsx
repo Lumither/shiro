@@ -9,8 +9,11 @@ import {
     TableHeader, TableRow
 } from '@heroui/react';
 import { FaFilter } from 'react-icons/fa';
-import { FaXmark } from 'react-icons/fa6';
-import { NewConfigRecordButton } from '@/app/(pages)/servers/editor/sshConfigRecord';
+import {
+    DeleteConfigRecordButton,
+    EditConfigRecordButton,
+    NewConfigRecordButton
+} from '@/app/(pages)/servers/editor/sshConfigRecord';
 import { ConfigListEditorContext } from '@/app/(pages)/servers/editor/ServerEditor';
 
 type Props = {
@@ -39,16 +42,11 @@ const SshConfigs = (props: Props) => {
                                startContent={ <FaFilter /> }
                                onValueChange={ setFilter }
                                value={ filter }
-                               endContent={ filter !== '' &&
-                                   <FaXmark
-                                       size={ '15px' }
-                                       onClick={ () => setFilter('') }
-                                   />
-                               }
+                               isClearable={ true }
+                               onClear={ () => setFilter('') }
                                size={ 'sm' }
                         />
-                        <NewConfigRecordButton
-                        />
+                        <NewConfigRecordButton />
                     </div>
                 </div>
                 <Table aria-label={ 'ssh config' } removeWrapper>
@@ -56,6 +54,7 @@ const SshConfigs = (props: Props) => {
                     <TableHeader>
                         <TableColumn className={ 'bg-neutral-700' }>KEY</TableColumn>
                         <TableColumn className={ 'bg-neutral-700' }>VALUE</TableColumn>
+                        <TableColumn className={ 'bg-neutral-700' }>ACTIONS</TableColumn>
                     </TableHeader>
                     <TableBody emptyContent={ filter === '' ? 'No SSH Config' : 'No Matching Pattern' }>
                         {
@@ -70,6 +69,12 @@ const SshConfigs = (props: Props) => {
                                         <TableRow key={ index }>
                                             <TableCell>{ key }</TableCell>
                                             <TableCell>{ value }</TableCell>
+                                            <TableCell className={ 'w-min' }>
+                                                <div className={ 'flex flex-row gap-2' }>
+                                                    <EditConfigRecordButton updateRec={ { key, value } } />
+                                                    <DeleteConfigRecordButton deleteKey={ key } />
+                                                </div>
+                                            </TableCell>
                                         </TableRow>
                                     ))
                                 : []

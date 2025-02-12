@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { IoAdd } from 'react-icons/io5';
 import {
     Autocomplete, AutocompleteItem,
@@ -17,19 +17,19 @@ import { getIterableObjectSshConfigList, sshConfigList } from '@/app/(pages)/ser
 import { SshConfigRecord as configRecord } from '@/types/shiro';
 import { toast } from 'react-toastify';
 import { ConfigListEditorContext } from '@/app/(pages)/servers/editor/ServerEditor';
+import { HiPencil } from 'react-icons/hi2';
+import { FaTrashAlt } from 'react-icons/fa';
 
 type Props = {
     className?: string;
     icon: React.ReactNode;
+    updateRec?: configRecord;
 };
 
-const SshConfigRecord = (props: Props) => {
-    const { className, icon } = props;
+const SshConfigRecord = memo((props: Props) => {
+    const { className, icon, updateRec } = props;
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-    const [ key, setKey ] = useState('');
-    const [ value, setValue ] = useState('');
 
     const ctx = useContext(ConfigListEditorContext);
     if (ctx == undefined) {
@@ -38,14 +38,35 @@ const SshConfigRecord = (props: Props) => {
     }
     const configList = ctx.configList;
     const setConfigList = ctx.setConfigList;
-    const appendConfigList = (record: configRecord) => {
-        setConfigList([ ...configList, record ]);
+
+    const [ key, setKey ] = useState(updateRec?.key ?? '');
+    const [ value, setValue ] = useState(updateRec?.value ?? '');
+
+    const appendConfigList = () => {
+        setConfigList([ ...configList, { key, value } ]);
+    };
+    const updateConfigListKey = () => {
+        setConfigList((items) => (
+            items.map(it => (
+                    it.key === updateRec?.key ? { ...it, value: value } : it
+                )
+            )
+        ));
     };
 
     const pushRecord = (onClose: () => void) => {
         if (key !== '') {
-            appendConfigList({ key, value });
-            onClose();
+            if (configList.every(it => key !== it.key)) {
+                appendConfigList();
+                toast.success('Added');
+                onClose();
+            } else if (updateRec) {
+                updateConfigListKey();
+                toast.success('Updated');
+                onClose();
+            } else {
+                toast.warn('Duplicated key, operation ignored', { autoClose: 1500 });
+            }
         } else {
             toast.warn('Empty key, operation ignored', { autoClose: 1500 });
         }
@@ -66,8 +87,10 @@ const SshConfigRecord = (props: Props) => {
                     base: [ 'bg-neutral-800' ]
                 } }
                 onClose={ () => {
-                    setKey('');
-                    setValue('');
+                    if (!updateRec) {
+                        setKey('');
+                        setValue('');
+                    }
                 } }
             >
                 <ModalContent>
@@ -76,29 +99,44 @@ const SshConfigRecord = (props: Props) => {
                             <div>
                                 <ModalHeader>SSH Config</ModalHeader>
                                 <ModalBody>
-                                    <Autocomplete
-                                        classNames={ {
-                                            popoverContent: [ 'bg-neutral-800' ]
-                                        } }
-                                        variant={ 'underlined' }
-                                        label={ 'Key' }
-                                        defaultItems={ getIterableObjectSshConfigList() }
-                                        onValueChange={ setKey }
-                                        onSelectionChange={ (key) => {
-                                            if (key != null) {
-                                                setKey(sshConfigList[parseInt(key.toString())]);
+                                    {
+                                        updateRec &&
+                                        <Input
+                                            variant={ 'underlined' }
+                                            isDisabled={ true }
+                                            label={'Key'}
+                                            value={ updateRec.key }
+                                        >
+                                        </Input>
+                                    }
+                                    { !updateRec &&
+                                        <Autocomplete
+                                            classNames={ {
+                                                popoverContent: [ 'bg-neutral-800' ]
+                                            } }
+                                            variant={ 'underlined' }
+                                            label={ 'Key' }
+                                            defaultItems={ getIterableObjectSshConfigList() }
+                                            onValueChange={ setKey }
+                                            isDisabled={ updateRec && true }
+                                            onSelectionChange={ (key) => {
+                                                if (key != null) {
+                                                    setKey(sshConfigList[parseInt(key.toString())]);
+                                                }
+                                            } }
+                                            allowsCustomValue={ true }
+                                        >
+                                            {
+                                                (item) => (
+                                                    <AutocompleteItem key={ item.key }>{ item.value }</AutocompleteItem>
+                                                )
                                             }
-                                        } }
-                                        allowsCustomValue={ true }
-                                        value={ key }
-                                    >
-                                        {
-                                            (item) => (
-                                                <AutocompleteItem key={ item.key }>{ item.value }</AutocompleteItem>
-                                            )
-                                        }
-                                    </Autocomplete>
-                                    <Input variant={ 'underlined' } label={ 'Value' } onValueChange={ setValue } />
+                                        </Autocomplete>
+                                    }
+                                    <Input variant={ 'underlined' }
+                                           label={ 'Value' }
+                                           value={ value }
+                                           onValueChange={ setValue } />
                                 </ModalBody>
                                 <ModalFooter className={ 'flex flex-col' }>
                                     { key !== '' &&
@@ -122,7 +160,7 @@ const SshConfigRecord = (props: Props) => {
             </Modal>
         </div>
     );
-};
+});
 
 export const NewConfigRecordButton = (
     { className }: { className?: string, }
@@ -132,5 +170,46 @@ export const NewConfigRecordButton = (
             className={ className }
             icon={ <IoAdd size={ '20px' } /> }
         />
+    );
+};
+
+export const EditConfigRecordButton = (
+    { className, updateRec }: { className?: string, updateRec: configRecord }
+) => {
+    return (
+        <SshConfigRecord
+            className={ className }
+            updateRec={ updateRec }
+            icon={ <HiPencil size={ '15px' } /> }
+        />
+    );
+};
+
+export const DeleteConfigRecordButton = ({ deleteKey }: { deleteKey: string }) => {
+    const ctx = useContext(ConfigListEditorContext);
+    if (ctx == undefined) {
+        toast.error('Unexpected ctx');
+        return <></>;
+    }
+    const configList = ctx.configList;
+    const setConfigList = ctx.setConfigList;
+
+    const deleteFromList = () => {
+        setConfigList(
+            [ ...configList ]
+                .filter((it) => it.key !== deleteKey)
+        );
+        toast.success('Deleted');
+    };
+
+    return (
+        <Button
+            // color={ 'danger' }
+            onPress={ deleteFromList }
+            size={ 'sm' }
+            isIconOnly
+        >
+            <FaTrashAlt size={ '13px' } />
+        </Button>
     );
 };
