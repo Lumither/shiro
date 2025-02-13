@@ -57,7 +57,7 @@ const SshConfigs = (props: Props) => {
                     <TableHeader>
                         <TableColumn className={ 'bg-neutral-700' }>KEY</TableColumn>
                         <TableColumn className={ 'bg-neutral-700' }>VALUE</TableColumn>
-                        <TableColumn className={ 'bg-neutral-700' }>ACTIONS</TableColumn>
+                        <TableColumn className={ 'bg-neutral-700' } align={ 'end' }>ACTIONS</TableColumn>
                     </TableHeader>
                     <TableBody emptyContent={ filter === '' ? 'No SSH Config' : 'No Matching Pattern' }>
                         {
@@ -72,7 +72,7 @@ const SshConfigs = (props: Props) => {
                                         <TableRow key={ index }>
                                             <TableCell>{ key }</TableCell>
                                             <TableCell>{ value }</TableCell>
-                                            <TableCell>
+                                            <TableCell className={ 'flex justify-end' }>
                                                 <div className={ 'flex flex-row gap-2' }>
                                                     <EditConfigRecordButton updateRec={ { key, value } } />
                                                     <DeleteConfigRecordButton deleteKey={ key } />
