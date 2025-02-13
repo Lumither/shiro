@@ -8,10 +8,11 @@ use std::fs::create_dir_all;
 
 use crate::gui::{
     build_main_window,
-    handlers::{
+    handlers::database::{
         add_tag_to_server, get_server_groups, get_server_tags, get_server_tags_with_sid,
         get_server_with_sid, get_servers, new_group, new_server,
     },
+    handlers::utils::check_ip_is_valid,
 };
 use libshiro::{
     init::{InitWithPaths, InitWithWorkDIr},
@@ -66,7 +67,8 @@ async fn main() {
             get_server_tags_with_sid,
             new_group,
             new_server,
-            add_tag_to_server
+            add_tag_to_server,
+            check_ip_is_valid
         ])
         .run(generate_context!())
         .expect("error while running tauri application");

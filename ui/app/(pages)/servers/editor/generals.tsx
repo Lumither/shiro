@@ -1,19 +1,12 @@
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Chip, Input, Select, SelectItem, Textarea } from '@heroui/react';
 import { Group, Tag } from '@/types/shiro';
-import ipaddr from 'ipaddr.js';
 import { invoke } from '@tauri-apps/api/core';
 import { GeneralEditorContext } from '@/app/(pages)/servers/editor/ServerEditor';
 import { toast } from 'react-toastify';
 
-// todo: use backend to check ip validity (remove ipaddr.js dependency)
-const isValidIP = (ip: string): boolean => {
-    try {
-        ipaddr.parse(ip);
-    } catch (e) {
-        return false;
-    }
-    return true;
+const isValidIP = async (ip: string): Promise<boolean> => {
+    return invoke('check_ip_is_valid', { ip: ip }).then((ret) => ret as boolean);
 };
 
 type Props = {
@@ -32,6 +25,8 @@ const Generals = (props: Props) => {
         return <></>;
     }
     const { setName, ip, setIp, setDescription, setGroup, setTags } = ctx;
+
+    const [ ipIsValid, setIpIsValid ] = useState(false);
 
     useEffect(() => {
         if (groupSet.size > 0) {
@@ -52,6 +47,12 @@ const Generals = (props: Props) => {
                 .map((val) => parseInt(val))
         );
     }, [ tagsSet ]);
+    useEffect(() => {
+        const update = async () => {
+            setIpIsValid(await isValidIP(ip));
+        };
+        update().then();
+    }, [ ip ]);
 
     // local
     const [ groupList, setGroupList ] = useState<Group[] | null>(null);
@@ -92,7 +93,7 @@ const Generals = (props: Props) => {
                        label={ 'IP' }
                        onValueChange={ setIp }
                        errorMessage={ 'Invalid IP address' }
-                       isInvalid={ !isValidIP(ip) }
+                       isInvalid={ !ipIsValid }
                 />
             </div>
             <div className={ 'flex flex-col sm:flex-row gap-5' }>
